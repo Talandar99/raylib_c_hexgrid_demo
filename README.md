@@ -1,1 +1,1 @@
-# raylib_C_hexgrid_demo
+# raylib_c_hexgrid_demo
