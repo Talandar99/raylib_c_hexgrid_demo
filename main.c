@@ -1,12 +1,13 @@
 #include "math.h"
 #include "raylib.h"
 
-typedef struct {
+struct HexGridTile{
     Vector2 screen_coordinates;
     double radius;
-} HexGridTile;
+    bool is_visible;
+};
 
-void DrawHexagon(double radius, double width, double height) {
+void DrawHexagon(double radius, double width, double height,struct HexGridTile grid[][grid_height],int grid_height) {
     // first line
     double offset_x = 100;
     double offset_y = 100;
@@ -43,7 +44,17 @@ int main(void) {
     // 720p
     const int screenWidth = 1280;
     const int screenHeight = 720;
+    int width = 16;
+    int height = 9;
+    int grid_width = width+(height / 2);
+    int grid_height = height;
 
+    struct HexGridTile grid[grid_width][grid_height];
+    for (int x=0; x<grid_width; x++) {
+        for (int y=0; y<grid_height; y++) {
+            grid[x][y].is_visible=false;
+        }
+    }
     InitWindow(screenWidth, screenHeight, "hex grid demo");
     SetTargetFPS(60);
     Vector2 ballPosition = {-100.0f, -100.0f};
@@ -71,11 +82,8 @@ int main(void) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
         double radius = 40.;
-        double width = 16.;
-        double height = 9.;
-        HexGridTile grid[(int)width + (int)(height / 2)][(int)height];
 
-        DrawHexagon(radius, width, height);
+        DrawHexagon(radius, width, height, grid, grid_height);
         DrawCircleV(ballPosition, 10, ballColor);
         EndDrawing();
     }
