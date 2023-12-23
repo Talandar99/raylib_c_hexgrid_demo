@@ -1,5 +1,6 @@
 #include "math.h"
 #include "raylib.h"
+#include "stdlib.h"
 
 struct HexGridTile{
     Vector2 screen_coordinates;
@@ -7,7 +8,7 @@ struct HexGridTile{
     bool is_visible;
 };
 
-void DrawHexagon(double radius, double width, double height,struct HexGridTile grid[][grid_height],int grid_height) {
+void DrawHexagon(double radius, double width, double height,struct HexGridTile** grid) {
     // first line
     double offset_x = 100;
     double offset_y = 100;
@@ -49,7 +50,11 @@ int main(void) {
     int grid_width = width+(height / 2);
     int grid_height = height;
 
-    struct HexGridTile grid[grid_width][grid_height];
+    struct HexGridTile** grid =(struct HexGridTile**) malloc(grid_width * sizeof(struct HexGridTile*));
+    for (int i = 0; i < grid_width; i++) {
+        grid[i] = (struct HexGridTile*)malloc(grid_height * sizeof(struct HexGridTile));
+    }
+
     for (int x=0; x<grid_width; x++) {
         for (int y=0; y<grid_height; y++) {
             grid[x][y].is_visible=false;
@@ -83,7 +88,7 @@ int main(void) {
         ClearBackground(RAYWHITE);
         double radius = 40.;
 
-        DrawHexagon(radius, width, height, grid, grid_height);
+        DrawHexagon(radius, width, height, grid);
         DrawCircleV(ballPosition, 10, ballColor);
         EndDrawing();
     }
